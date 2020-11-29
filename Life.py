@@ -1,7 +1,7 @@
 import pygame
 import time
 import threading
-from numba import jit, cuda
+
 
 #Created by Nut-Stack
 SPEED = .05
