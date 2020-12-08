@@ -2,18 +2,25 @@ import pygame
 import time
 import threading
 
-
 #Created by Nut-Stack
-SPEED = .05
+
+'''
+RULES
+1. Each dead cell adjacent to exactly three live neighbors will become alive in the next generation.
+2. Each live cell with one or fewer live neighbors will die in the next generation.
+3. Each live cell with four or more live neighbors will die in the next generation.
+4. If a cell has two or three live neighbors will remain alive in the next generation.
+
+Advance the generation by pressing/holding the spacebar.
+'''
 
 pygame.init()
 WINDOW_HEIGHT = 1024
 WINDOW_WIDTH = 1024
 gameDisplay = pygame.display.set_mode((WINDOW_HEIGHT,WINDOW_WIDTH))
-pygame.display.set_caption('Conways Game of Fife')
+pygame.display.set_caption('Conways Game of Life')
 
 crashed = False
-
 x=0
 y=0
 height = 10
@@ -33,13 +40,8 @@ LIVE_COLOR = (255,127,39)
 DEAD_COLOR = (5,5,0)
 gameDisplay.fill(DEAD_COLOR)
 
-'''
-RULES
-1. Each dead cell adjacent to exactly three live neighbors will become live in the next generation
-2. Each live cell with one or fewer live neighbors will die in the next generation
-3. Each live cell with four or more live neighbors will die in the next generation
-4. If a cell has two or three live neighbors will remain alive in the next generation.
-'''
+
+
 if drawn == False:
     for y1 in range (WINDOW_HEIGHT):
         for x1 in range (WINDOW_WIDTH):
@@ -207,19 +209,18 @@ while not crashed:
 
             t1 = threading.Thread(target = Generate_Dead.Generate_X)
             t2 = threading.Thread(target = Generate_Dead.Generate_Y)
-            t3 = threading.Thread(target = Generate_Dead.Make_Dead_List) #JOIN (not needed maybe IDFK)
+            t3 = threading.Thread(target = Generate_Dead.Make_Dead_List)
 
             t4 = threading.Thread(target = Kill_Em)
-            t5 = threading.Thread(target = Give_Life) #JOIN
+            t5 = threading.Thread(target = Give_Life)
 
             t6 = threading.Thread(target = Cleanup.Dead_List_Remover)
             t7 = threading.Thread(target = Cleanup.Live_List_Appender)
-            t8 = threading.Thread(target = Cleanup.List_Demolisher) #JOIN
+            t8 = threading.Thread(target = Cleanup.List_Demolisher)
 
             t1.start()
             t2.start()
             t3.start()
-            #t3.join()
 
             t4.start()
             t5.start()
