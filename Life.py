@@ -1,6 +1,6 @@
 import pygame
-import time
 import threading
+import numpy as np
 
 #Created by Nut-Stack
 
@@ -65,7 +65,7 @@ while not crashed:
                     else:
                         pygame.draw.rect(gameDisplay,DEAD_COLOR,(block_to_fill_x,block_to_fill_y,BLOCKSIZE-2,BLOCKSIZE-2))
                         block_list.remove([block_to_fill_x,block_to_fill_y])
-                block_list.sort()
+                #block_list.sort()
                 print(block_list)
 
         key_input = pygame.key.get_pressed()
@@ -86,7 +86,6 @@ while not crashed:
 
             def Kill_Em():
                 for block in block_list:
-
                     Kblock_right = [block[0] + BLOCKSIZE,block[1]]
                     Kblock_left = [block[0] - BLOCKSIZE,block[1]]
                     Kblock_up = [block[0],block[1] - BLOCKSIZE]
@@ -97,49 +96,35 @@ while not crashed:
                     Kblock_left_up = [block[0] - BLOCKSIZE,block[1] - BLOCKSIZE]
                     Kblock_left_down = [block[0] - BLOCKSIZE,block[1] + BLOCKSIZE]
 
-
-                    Kbool_right = 0
-                    Kbool_left = 0
-                    Kbool_up = 0
-                    Kbool_down = 0
-                    Kbool_right_up = 0
-                    Kbool_right_down = 0
-                    Kbool_left_up = 0
-                    Kbool_left_down = 0
-
+                    dead_counter = 0
                     if Kblock_right in block_list:
-                        Kbool_right = 1
+                        dead_counter += 1
 
                     if Kblock_left in block_list:
-                        Kbool_left = 1
+                        dead_counter += 1
 
                     if Kblock_up in block_list:
-                        Kbool_up = 1
+                        dead_counter += 1
 
                     if Kblock_down in block_list:
-                        Kbool_down = 1
+                        dead_counter += 1
 
                     if Kblock_right_up in block_list:
-                        Kbool_right_up = 1
+                        dead_counter += 1
 
                     if Kblock_right_down in block_list:
-                        Kbool_right_down = 1
+                        dead_counter += 1
 
                     if Kblock_left_up in block_list:
-                        Kbool_left_up = 1
+                        dead_counter += 1
 
                     if Kblock_left_down in block_list:
-                        Kbool_left_down = 1
+                        dead_counter += 1
 
-                    bool_KILL_list = [Kbool_right , Kbool_left , Kbool_up , Kbool_down , Kbool_right_up , Kbool_right_down , Kbool_left_up , Kbool_left_down]
-
-                    if (sum(bool_KILL_list)) <= 1:
+                    if dead_counter <= 1 or dead_counter >= 4:
                         pygame.draw.rect(gameDisplay,DEAD_COLOR,(block[0],block[1],BLOCKSIZE-2,BLOCKSIZE-2))
                         dead_list.append([block[0],block[1]])
 
-                    if (sum(bool_KILL_list)) >= 4:
-                        pygame.draw.rect(gameDisplay,DEAD_COLOR,(block[0],block[1],BLOCKSIZE-2,BLOCKSIZE-2))
-                        dead_list.append([block[0],block[1]])
 
             def Give_Life():
                 for block in generated_dead_list:
@@ -153,42 +138,32 @@ while not crashed:
                     Lblock_left_up = [block[0] - BLOCKSIZE,block[1] - BLOCKSIZE]
                     Lblock_left_down = [block[0] - BLOCKSIZE,block[1] + BLOCKSIZE]
 
-                    Lbool_right = 0
-                    Lbool_left = 0
-                    Lbool_up = 0
-                    Lbool_down = 0
-                    Lbool_right_up = 0
-                    Lbool_right_down = 0
-                    Lbool_left_up = 0
-                    Lbool_left_down = 0
-
+                    life_counter = 0
                     if Lblock_right in block_list:
-                        Lbool_right = 1
+                        life_counter += 1
 
                     if Lblock_left in block_list:
-                        Lbool_left = 1
+                        life_counter += 1
 
                     if Lblock_up in block_list:
-                        Lbool_up = 1
+                        life_counter += 1
 
                     if Lblock_down in block_list:
-                        Lbool_down = 1
+                        life_counter += 1
 
                     if Lblock_right_up in block_list:
-                        Lbool_right_up = 1
+                        life_counter += 1
 
                     if Lblock_right_down in block_list:
-                        Lbool_right_down = 1
+                        life_counter += 1
 
                     if Lblock_left_up in block_list:
-                        Lbool_left_up = 1
+                        life_counter += 1
 
                     if Lblock_left_down in block_list:
-                        Lbool_left_down = 1
+                        life_counter += 1
 
-                    bool_CREATE_list = [Lbool_right , Lbool_left , Lbool_up , Lbool_down , Lbool_right_up , Lbool_right_down , Lbool_left_up , Lbool_left_down]
-
-                    if sum(bool_CREATE_list) == 3:
+                    if life_counter == 3:
                         pygame.draw.rect(gameDisplay,LIVE_COLOR,(block[0],block[1],BLOCKSIZE-2,BLOCKSIZE-2))
                         live_list.append([block[0],block[1]])
 
@@ -229,7 +204,7 @@ while not crashed:
             t6.start()
             t7.start()
             t8.start()
-            t8.join()
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 crashed = True
